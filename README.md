@@ -2,4 +2,4 @@
 Scripts, Calculators etc.
 
 
-Please do not copy/pasting my work in this repo anywhere outside!
+Please do not copy/pasting/utilize my code within this repo anywhere!
