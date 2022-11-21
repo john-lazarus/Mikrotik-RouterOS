@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+ <meta name="viewport" content="width=600">
+<head>
+<!--Script CDNs-->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/highlight.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro">
+<body>  
+  <div class="row" id="submission_form">
+    <div class="input-field col s6">
+  <p>
+    <label for="quantity">Number of Upstream WAN Links?</label>
+    <input type="number" id="wans" value="2" placeholder="Number of WANs" name="quantity" min="2" max="8" class="validate" onchange="EnableDisableOtherWANs2()">
+  </p>
+<p>
+    <label for="equal">Do the WANs have assymetric download bandwidth? &nbsp;</label>
+    <label>
+      <input name="yesno" id="equal" type="radio" checked onclick="EnableDisableOtherWANs()" />
+      <span>Yes</span>
+    </label>
+    <label>
+      <input name="yesno" id="non-equal" type="radio" onclick="EnableDisableOtherWANs()"/>
+      <span>No</span>
+    </label>
+</p>
+<p id="pwan1speed">
+  <label for="wan1speed">WAN 1 Speed</label>
+  <input type="number" id="wan1speed" placeholder="WAN 1 Speed (in MB/s)" name="wan1speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan2speed">
+  <label for="wan1speed">WAN 2 Speed</label>
+  <input type="number" id="wan2speed" placeholder="WAN 2 Speed (in MB/s)" name="wan2speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan3speed">
+  <label for="wan1speed">WAN 3 Speed</label>
+  <input type="number" id="wan3speed" placeholder="WAN 3 Speed (in MB/s)" name="wan3speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan4speed">
+  <label for="wan1speed">WAN 4 Speed</label>
+  <input type="number" id="wan4speed" placeholder="WAN 4 Speed (in MB/s)" name="wan4speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan5speed">
+  <label for="wan1speed">WAN 5 Speed</label>
+  <input type="number" id="wan5speed" placeholder="WAN 5 Speed (in MB/s)" name="wan5speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan6speed">
+  <label for="wan1speed">WAN 6 Speed</label>
+  <input type="number" id="wan6speed" placeholder="WAN 6 Speed (in MB/s)" name="wan6speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan7speed">
+  <label for="wan1speed">WAN 7 Speed</label>
+  <input type="number" id="wan7speed" placeholder="WAN 7 Speed (in MB/s)" name="wan7speed" min="1" max="10000" class="validate">
+</p>
+<p id="pwan8speed">
+  <label for="wan1speed">WAN 8 Speed</label>
+  <input type="number" id="wan8speed" placeholder="WAN 8 Speed (in MB/s)" name="wan8speed" min="1" max="10000" class="validate">
+</p>
+<p>
+  <button class="btn waves-effect waves-light" type="submit" id="submitbutton" name="calculate" onclick="ShowValues(); this.disabled=true;">
+     Calculate
+    <i class="material-icons right"></i>
+  </button>
+  <button class="btn waves-effect waves-light" type="submit" id="reload" name="reload" onclick="window.location.reload();">
+    Reload/Re-calculate
+   <i class="material-icons right"></i>
+ </button>
+  </p>
+</div>
+</div>
+<div class="row" id="computedgcd">
+  <form class="col s12">
+    <div class="row"> 
+      <div class="input-field col s6">
+        <label for="gcdvalue">Computed GCD</label>
+        <input type="number" id="gcdvalue" placeholder="Computed GCD" name="gcdvalue" style="font-weight: bold;" readonly>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="wrap">
+  <p><a id="showgcdtext" href="#" class="underlined underlined--thin">Your WAN Speed Ratio for PCC is = </a><a id="showratio1" class="underlined underlined--thick"></a><a id="ratioseparator1">:</a><a id="showratio2" class="underlined underlined--thick"></a><a id="ratioseparator2">:</a><a id="showratio3" class="underlined underlined--thick"></a><a id="ratioseparator3">:</a><a id="showratio4" class="underlined underlined--thick"></a><a id="ratioseparator4">:</a><a id="showratio5" class="underlined underlined--thick"></a><a id="ratioseparator5">:</a><a id="showratio6" class="underlined underlined--thick"></a><a id="ratioseparator6">:</a><a id="showratio7" class="underlined underlined--thick"></a><a id="ratioseparator7">:</a><a id="showratio8" class="underlined underlined--thick"></a>
+  </p>
+</div>
+<div class="wrap" id="totalrulesdiv">
+  <p><a id="totalrulestext" href="#" class="underlined underlined--thin">that means your Total Number of Mangle Rules will be = </a><a id="totalrulesval" class="underlined underlined--thick"></a>
+  </p>
+</div>
+<div class="card" id="vizdiv">
+  <p><a id="viztext" href="#" style="color: #000000;">viz, </a><a id="wan1rules" class="underlined underlined--thick">Wan 1 = </a><a id="wan1rulesseparator" style="color: #000000;"> and </a><a id="wan2rules" class="underlined underlined--thick">Wan 2 = </a><a id="wan2rulesseparator" style="color: #000000;"> and </a><a id="wan3rules" class="underlined underlined--thick">Wan 3 = </a><a id="wan3rulesseparator" style="color: #000000;"> and </a><a id="wan4rules" class="underlined underlined--thick">Wan 4 = </a><a id="wan4rulesseparator" style="color: #000000;"> and </a><a id="wan5rules" class="underlined underlined--thick">Wan 5 = </a><a id="wan5rulesseparator" style="color: #000000;"> and </a><a id="wan6rules" class="underlined underlined--thick">Wan 6 = </a><a id="wan6rulesseparator" style="color: #000000;"> and </a><a id="wan7rules" class="underlined underlined--thick">Wan 7 = </a><a id="wan7rulesseparator" style="color: #000000;"> and </a><a id="wan8rules" class="underlined underlined--thick">Wan 8 = </a><a id="wan8rulesseparator">; </a>
+  </p>
+</div>
+<div class="wrap" id="inotherwordsdiv">
+  <p><a id="showgcdtext" href="#" class="underlined underlined--thin">In other words, your PCC Rules will look like below:</a>
+  </p>
+
+  <div id="tablerulesdiv">
+    <table id="tablerules" class="striped">
+      <thead>
+        <tbody id="tablerulesbody">
+        <tr>
+            <th>Rule #</th>
+            <th>PCC Numerator/Denominator</th>
+            <th>for which WAN?</th>
+        </tr>
+      </thead>
+    </tbody>
+     </table>
+  </div>
+
+<script src="js/index.js"></script>
+<script src="js/cal.js"></script>
+
+
+</body>
+</head>
+</html>
